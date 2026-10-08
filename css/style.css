@@ -829,6 +829,82 @@ body.loaded .hero-bg {
   transform: translateX(4px);
 }
 
+/* ── Services List (Tabela de Procedimentos) ── */
+.services-list-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.services-list-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 6px;
+  padding: 2.5rem 2.2rem;
+  overflow: hidden;
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+}
+
+.services-list-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.services-list-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--rose-light), var(--rose));
+}
+
+.services-list-title {
+  font-family: var(--font-heading);
+  font-size: 1.55rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-white);
+  margin-bottom: 1.8rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.services-list-title span {
+  color: var(--rose-light);
+}
+
+.services-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.service-line {
+  display: flex;
+  align-items: baseline;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: var(--text-main);
+  line-height: 1.5;
+}
+
+.service-line::after {
+  content: '';
+  flex: 1;
+  margin: 0 0.6rem;
+  border-bottom: 2px dotted rgba(201, 160, 160, 0.35);
+  transform: translateY(-4px);
+}
+
+.services-cta {
+  text-align: center;
+  margin-top: 3rem;
+}
+
 /* ── About ── */
 .about-wrapper {
   display: grid;
@@ -1024,6 +1100,124 @@ body.loaded .hero-bg {
   letter-spacing: 1px;
   text-align: center;
   padding: 1rem;
+}
+
+/* ── Antes & Depois (Slider Comparativo) ── */
+.ba-slider {
+  --pos: 50%;
+  position: relative;
+  max-width: 440px;
+  margin: 0 auto;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  cursor: ew-resize;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.ba-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.ba-before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+}
+
+.ba-label {
+  position: absolute;
+  top: 1rem;
+  z-index: 4;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--text-white);
+  background: rgba(26, 26, 26, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  pointer-events: none;
+}
+
+.ba-label-before { left: 1rem; }
+.ba-label-after { right: 1rem; }
+
+.ba-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--pos);
+  width: 2px;
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: ew-resize;
+  border: none;
+  padding: 0;
+}
+
+.ba-handle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 44px;
+  transform: translateX(-50%);
+}
+
+.ba-handle svg {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 11px;
+  border-radius: 50%;
+  background: var(--rose-light);
+  color: var(--bg-dark);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  transition: transform 0.3s var(--ease), background 0.3s var(--ease);
+}
+
+.ba-slider:hover .ba-handle svg,
+.ba-slider.dragging .ba-handle svg {
+  transform: scale(1.12);
+  background: var(--rose-pale);
+}
+
+.ba-handle:focus-visible {
+  outline: none;
+}
+
+.ba-handle:focus-visible svg {
+  box-shadow: 0 0 0 3px rgba(232, 180, 184, 0.6);
+}
+
+.ba-hint {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--text-muted);
 }
 
 /* ── Testimonials ── */
@@ -1477,6 +1671,12 @@ body.loaded .hero-bg {
     bottom: 20px;
     right: 16px;
   }
+}
+
+@media (max-width: 768px) {
+  .services-list-grid { grid-template-columns: 1fr; }
+  .services-list-card { padding: 2rem 1.5rem; }
+  .ba-slider { max-width: 340px; }
 }
 
 @media (max-width: 480px) {

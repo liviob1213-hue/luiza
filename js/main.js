@@ -375,4 +375,63 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // === 10. Before / After Comparison Slider ===
+    const baSlider = document.getElementById('ba-slider');
+    const baHandle = document.getElementById('ba-handle');
+
+    if (baSlider && baHandle) {
+        let dragging = false;
+
+        const setPosition = (clientX) => {
+            const rect = baSlider.getBoundingClientRect();
+            if (rect.width === 0) return;
+
+            let pos = ((clientX - rect.left) / rect.width) * 100;
+            pos = Math.max(0, Math.min(100, pos));
+
+            baSlider.style.setProperty('--pos', pos + '%');
+            baHandle.setAttribute('aria-valuenow', Math.round(pos));
+        };
+
+        baSlider.addEventListener('pointerdown', (e) => {
+            dragging = true;
+            baSlider.classList.add('dragging');
+            if (baSlider.setPointerCapture) {
+                try { baSlider.setPointerCapture(e.pointerId); } catch (err) { /* noop */ }
+            }
+            setPosition(e.clientX);
+            e.preventDefault();
+        });
+
+        baSlider.addEventListener('pointermove', (e) => {
+            if (!dragging) return;
+            setPosition(e.clientX);
+        });
+
+        const stopDrag = () => {
+            dragging = false;
+            baSlider.classList.remove('dragging');
+        };
+
+        baSlider.addEventListener('pointerup', stopDrag);
+        baSlider.addEventListener('pointercancel', stopDrag);
+
+        // Keyboard support (left / right arrows on the handle)
+        baHandle.addEventListener('keydown', (e) => {
+            const current = parseFloat(baHandle.getAttribute('aria-valuenow')) || 50;
+            let next = current;
+
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') next = current - 5;
+            else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') next = current + 5;
+            else if (e.key === 'Home') next = 0;
+            else if (e.key === 'End') next = 100;
+            else return;
+
+            next = Math.max(0, Math.min(100, next));
+            baSlider.style.setProperty('--pos', next + '%');
+            baHandle.setAttribute('aria-valuenow', Math.round(next));
+            e.preventDefault();
+        });
+    }
 });
